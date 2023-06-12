@@ -1,0 +1,57 @@
+import { FC, useEffect, useRef, useState } from "react";
+import { useAppContext } from "../../middleware/context-provider";
+import { Navigate } from "react-router-dom";
+import { Button } from "@mui/material";
+
+export const MapViewer: FC = () => {
+	const [state, dispatch] = useAppContext();
+	const { user } = state;
+	const [isCreating, setIsCreating] = useState(false);
+
+	const containerRef = useRef(null);
+
+	const onToggleCreate = () => {
+		setIsCreating(!isCreating);
+	};
+
+	const onCreate = () => {
+		if (isCreating) {
+			dispatch({ type: "ADD_BUILDING", payload: user });
+			setIsCreating(false);
+		}
+	};
+
+	useEffect(() => {
+		const container = containerRef.current;
+		if (container && user) {
+			dispatch({ type: "START_MAP", payload: { container, user } });
+		}
+
+		// Called when the component is destroyed
+		return () => {
+			dispatch({ type: "REMOVE_MAP" });
+		};
+	}, []);
+
+	if (!user) {
+		return <Navigate to="/login" />;
+	}
+
+	const onLogout = () => {
+		dispatch({ type: "LOGOUT" });
+	};
+
+	return (
+		<>
+			<div className="full-screen" ref={containerRef}></div>
+			{isCreating && (
+				<div className="overlay">
+					<p>Right click to create a new building or </p>
+					<Button onClick={onToggleCreate}>cancel</Button>
+				</div>
+			)}
+			<Button onClick={onToggleCreate}>Create building</Button>
+			<Button onClick={onLogout}>Log out</Button>
+		</>
+	);
+};
