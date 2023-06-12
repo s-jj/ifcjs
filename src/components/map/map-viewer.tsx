@@ -6,7 +6,7 @@ import "./map-viewer.css";
 
 export const MapViewer: FC = () => {
   const [state, dispatch] = useAppContext();
-  const { user } = state;
+  const { user, building } = state;
   const [isCreating, setIsCreating] = useState(false);
 
   const containerRef = useRef(null);
@@ -36,6 +36,11 @@ export const MapViewer: FC = () => {
 
   if (!user) {
     return <Navigate to="/login" />;
+  }
+
+  if (building) {
+    const url = `/building?id=${building}`;
+    return <Navigate to={url} />;
   }
 
   const onLogout = () => {
