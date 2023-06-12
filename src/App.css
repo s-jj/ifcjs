@@ -1,11 +1,26 @@
 * {
-	margin: 0;
-	padding: 0;
-	box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Roboto", Arial, Helvetica, sans-serif;
 }
 
 .full-screen {
-	height: 100vh;
-	width: 100vw;
-	position: absolute;
+  height: 100vh;
+  width: 100vw;
+  position: absolute;
+}
+
+.thumbnail {
+  background-color: rgba(230, 230, 230, 0.7);
+  padding: 10px;
+  border-radius: 100%;
+  border: 5px solid white;
+  pointer-events: all;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.thumbnail:hover {
+  background-color: rgb(230, 230, 230);
+  cursor: pointer;
 }
