@@ -8,7 +8,7 @@ export const reducer = (state: State, action: Action) => {
       user: action.payload,
     };
   }
-  if (action.type === "OPEN_BUILDING") {
+  if (action.type === "OPEN_BUILDING" || action.type === "UPDATE_BUILDING") {
     return {
       ...state,
       building: action.payload,
