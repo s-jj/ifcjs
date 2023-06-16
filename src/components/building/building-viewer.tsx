@@ -16,6 +16,10 @@ export const BuildingViewer: FC = () => {
 
   const { user, building } = state;
 
+  if (!user) {
+    return <Navigate to="/login" />;
+  }
+
   if (!building) {
     return <Navigate to="/map" />;
   }
