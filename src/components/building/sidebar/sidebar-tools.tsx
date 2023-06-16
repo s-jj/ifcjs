@@ -8,25 +8,26 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { Action } from "../../../middleware/actions";
 import { State } from "../../../middleware/state";
 import { Tool } from "../../../types";
+import { FrontMenuMode } from "../types";
 
 export function getSidebarTools(
   state: State,
   dispatch: React.Dispatch<Action>,
-  toggleMenu: () => void
+  toggleMenu: (active: boolean, mode?: FrontMenuMode) => void
 ): Tool[] {
   return [
     {
       name: "Info",
       icon: <ListIcon />,
       action: () => {
-        toggleMenu();
+        toggleMenu(true, "BuildingInfo");
       },
     },
     {
       name: "Models",
       icon: <ModelsIcon />,
       action: () => {
-        console.log("Models!");
+        toggleMenu(true, "ModelList");
       },
     },
     {

@@ -2,7 +2,6 @@ import { FC } from "react";
 import { Box, Button, TextField } from "@mui/material";
 import { useAppContext } from "../../../../middleware/context-provider";
 import "./front-menu-content.css";
-import { Navigate } from "react-router-dom";
 
 export const BuildingInfoMenu: FC<{
   onToggleMenu: () => void;

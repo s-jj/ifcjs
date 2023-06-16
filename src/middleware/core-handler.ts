@@ -3,27 +3,45 @@ import { databaseHandler } from "../core/db/db-handler";
 import { Action } from "./actions";
 import { Events } from "./event-handler";
 
-export const executeCore = (action: Action, events: Events) => {
-  if (action.type === "LOGIN") {
+type ActionHandler = (action: Action, events: Events) => void;
+
+const actionHandlers: Record<string, ActionHandler> = {
+  LOGIN: (action, events) => {
     databaseHandler.login();
-  }
-  if (action.type === "LOGOUT") {
+  },
+  LOGOUT: (action, events) => {
     databaseHandler.logout();
-  }
-  if (action.type === "START_MAP") {
+  },
+  START_MAP: (action, events) => {
     const { container, user } = action.payload;
     mapHandler.start(container, user, events);
-  }
-  if (action.type === "REMOVE_MAP") {
+  },
+  REMOVE_MAP: (action, events) => {
     mapHandler.remove();
-  }
-  if (action.type === "ADD_BUILDING") {
+  },
+  ADD_BUILDING: (action, events) => {
     mapHandler.addBuilding(action.payload);
-  }
-  if (action.type === "DELETE_BUILDING") {
+  },
+  DELETE_BUILDING: (action, events) => {
     databaseHandler.deleteBuilding(action.payload, events);
-  }
-  if (action.type === "UPDATE_BUILDING") {
+  },
+  UPDATE_BUILDING: (action, events) => {
     databaseHandler.updateBuilding(action.payload);
+  },
+  UPLOAD_MODEL: (action, events) => {
+    const { model, file, building } = action.payload;
+    databaseHandler.uploadModel(model, file, building, events);
+  },
+  DELETE_MODEL: (action, events) => {
+    const { model, building } = action.payload;
+    databaseHandler.deleteModel(model, building, events);
+  },
+};
+
+export const executeCore = (action: Action, events: Events) => {
+  const handler = actionHandlers[action.type];
+
+  if (handler) {
+    handler(action, events);
   }
 };

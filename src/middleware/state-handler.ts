@@ -1,24 +1,33 @@
 import { State } from "./state";
 import { Action } from "./actions";
 
-export const reducer = (state: State, action: Action) => {
-  if (action.type === "UPDATE_USER") {
-    return {
-      ...state,
-      user: action.payload,
-    };
+type ReducerFunction = (state: State, action: Action) => State;
+
+const reducerFunctions: Record<string, ReducerFunction> = {
+  UPDATE_USER: (state, action) => ({
+    ...state,
+    user: action.payload,
+  }),
+  OPEN_BUILDING: (state, action) => ({
+    ...state,
+    building: action.payload,
+  }),
+  UPDATE_BUILDING: (state, action) => ({
+    ...state,
+    building: action.payload,
+  }),
+  CLOSE_BUILDING: (state, action) => ({
+    ...state,
+    building: null,
+  }),
+};
+
+export const reducer: ReducerFunction = (state, action) => {
+  const reducerFunction = reducerFunctions[action.type];
+
+  if (reducerFunction) {
+    return reducerFunction(state, action);
   }
-  if (action.type === "OPEN_BUILDING" || action.type === "UPDATE_BUILDING") {
-    return {
-      ...state,
-      building: action.payload,
-    };
-  }
-  if (action.type === "CLOSE_BUILDING") {
-    return {
-      ...state,
-      building: null,
-    };
-  }
+
   return { ...state };
 };
