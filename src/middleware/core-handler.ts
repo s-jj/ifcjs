@@ -2,11 +2,12 @@ import { mapHandler } from "../core/map/map-handler";
 import { databaseHandler } from "../core/db/db-handler";
 import { Action } from "./actions";
 import { Events } from "./event-handler";
+import { buildingHandler } from "../core/building/building-handler";
 
 type ActionHandler = (action: Action, events: Events) => void;
 
 const actionHandlers: Record<string, ActionHandler> = {
-  LOGIN: (action, events) => {
+  LOGIN: (action?, events?) => {
     databaseHandler.login();
   },
   LOGOUT: (action, events) => {
@@ -17,6 +18,9 @@ const actionHandlers: Record<string, ActionHandler> = {
     mapHandler.start(container, user, events);
   },
   REMOVE_MAP: (action, events) => {
+    mapHandler.remove();
+  },
+  OPEN_BUILDING: (action, events) => {
     mapHandler.remove();
   },
   ADD_BUILDING: (action, events) => {
@@ -35,6 +39,12 @@ const actionHandlers: Record<string, ActionHandler> = {
   DELETE_MODEL: (action, events) => {
     const { model, building } = action.payload;
     databaseHandler.deleteModel(model, building, events);
+  },
+  START_BUILDING: (action, events) => {
+    buildingHandler.start(action.payload);
+  },
+  CLOSE_BUILDING: (action, events) => {
+    buildingHandler.remove();
   },
 };
 

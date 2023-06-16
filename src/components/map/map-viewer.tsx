@@ -27,11 +27,6 @@ export const MapViewer: FC = () => {
     if (container && user) {
       dispatch({ type: "START_MAP", payload: { container, user } });
     }
-
-    // Called when the component is destroyed
-    return () => {
-      dispatch({ type: "REMOVE_MAP" });
-    };
   }, []);
 
   if (!user) {
