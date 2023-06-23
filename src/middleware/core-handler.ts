@@ -32,16 +32,18 @@ const actionHandlers: Record<string, ActionHandler> = {
   UPDATE_BUILDING: (action, events) => {
     databaseHandler.updateBuilding(action.payload);
   },
-  UPLOAD_MODEL: (action, events) => {
+  UPLOAD_MODEL: async (action, events) => {
     const { model, file, building } = action.payload;
-    databaseHandler.uploadModel(model, file, building, events);
+    const zipFile = await buildingHandler.convertIfcToFragments(file);
+    databaseHandler.uploadModel(model, zipFile, building, events);
   },
   DELETE_MODEL: (action, events) => {
     const { model, building } = action.payload;
     databaseHandler.deleteModel(model, building, events);
   },
-  START_BUILDING: (action, events) => {
-    buildingHandler.start(action.payload);
+  START_BUILDING: async (action, events) => {
+    const { container, building } = action.payload;
+    await buildingHandler.start(container, building);
   },
   CLOSE_BUILDING: (action, events) => {
     buildingHandler.remove();
