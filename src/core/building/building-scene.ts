@@ -9,6 +9,7 @@ export class BuildingScene {
   private components: OBC.Components;
   private fragments: OBC.Fragments;
   private database = new BuildingDatabase();
+  private sceneEvents: { name: any; action: any }[] = [];
 
   constructor(container: HTMLDivElement, building: Building) {
     this.components = new OBC.Components();
@@ -42,13 +43,38 @@ export class BuildingScene {
     this.components.tools.add(this.fragments);
 
     this.loadAllModels(building);
+
+    this.setupEvents();
   }
 
   dispose() {
     this.components.dispose();
     (this.components as any) = null;
     (this.fragments as any) = null;
+    this.toggleEvents(false);
   }
+
+  private setupEvents() {
+    this.sceneEvents = [
+      { name: "mousemove", action: this.updateCulling },
+      { name: "wheel", action: this.updateCulling },
+    ];
+    this.toggleEvents(true);
+  }
+
+  private toggleEvents(active: boolean) {
+    for (const event of this.sceneEvents) {
+      if (active) {
+        window.addEventListener(event.name, event.action);
+      } else {
+        window.removeEventListener(event.name, event.action);
+      }
+    }
+  }
+
+  private updateCulling = () => {
+    this.fragments.culler.needsUpdate = true;
+  };
 
   async convertIfcToFragments(ifc: File) {
     let fragments = new OBC.Fragments(this.components);
