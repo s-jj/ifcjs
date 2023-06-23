@@ -16,6 +16,7 @@
     "@types/react": "^18.2.9",
     "@types/react-dom": "^18.2.4",
     "client-zip": "^2.4.4",
+    "dexie": "^3.2.4",
     "firebase": "^9.22.2",
     "mapbox-gl": "^2.15.0",
     "openbim-components": "^0.0.51",
